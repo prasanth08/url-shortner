@@ -1,0 +1,6 @@
+
+//@name = test
+GET localhost:8080/app/redirect/asw
+
+
+POST
