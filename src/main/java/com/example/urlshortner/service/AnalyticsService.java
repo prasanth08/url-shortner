@@ -21,12 +21,23 @@ public class AnalyticsService {
         this.redisTemplate = stringRedisTemplate;
     }
 
+
+    /**
+     * Creates an entry into a concurrent multiset for each count
+     * It's an async method since it does not concern user response
+     * We are using a jvm in memory data structure to avoid network calls towards redis
+     * @param url
+     */
     @Async
     public void analyzeURL(String url){
         url = StringUtils.substringBeforeLast(url,".");
         counter.add(url);
     }
 
+    /**
+     *
+     * @return count of each host that is shortened
+     */
     public Map<String,Long> getAllReport(){
         var countMap = new HashMap<String,Long>();
         var keys = redisTemplate.keys("*");

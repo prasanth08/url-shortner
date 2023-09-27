@@ -11,7 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+/**
+ * REST Controller class for all the user facing business use cases
+ *
+ * @author  Prasanth Omanakuttan
+ * @version 1.0
+ * @since   2023-09-27
+ */
 @RestController
 @RequestMapping("app")
 public class URLShortnerController {

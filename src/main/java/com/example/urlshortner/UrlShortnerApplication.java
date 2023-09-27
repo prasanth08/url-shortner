@@ -8,7 +8,13 @@ import org.springframework.context.annotation.Bean;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+/**
+ * UrlShortnerApplication
+ *
+ * @author  Prasanth Omanakuttan
+ * @version 1.0
+ * @since   2023-09-27
+ */
 @SpringBootApplication
 public class UrlShortnerApplication {
     private static final Logger LOGGER = Logger.getLogger(UrlShortnerApplication.class.getName());

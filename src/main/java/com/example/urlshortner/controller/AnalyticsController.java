@@ -10,6 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * REST Controller class for all the admin facing business use cases
+ *
+ * @author  Prasanth Omanakuttan
+ * @version 1.0
+ * @since   2023-09-27
+ */
 @RestController
 @RequestMapping("internal")
 public class AnalyticsController {
@@ -21,7 +28,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/analysis")
-    public ResponseEntity<Map> handleRedirectForShortUrl() {
+    public ResponseEntity<Map<String,Long>> handleRedirectForShortUrl() {
         var report = analyticsService.getAllReport();
         return new ResponseEntity<>(report, HttpStatus.OK);
     }

@@ -36,6 +36,11 @@ public class ShortnerService {
         this.analyticsService = analyticsService;
     }
 
+    /**
+     * Create a 32 bit hash for original url
+     * @param request
+     * @return
+     */
     public ShortenResponse createShortUrl(@NonNull ShortenRequest request){
        var originalUrl =  request.originalUrl();
        //validate url
@@ -45,6 +50,7 @@ public class ShortnerService {
            //if present use the same
            var hash = Hashing.murmur3_32_fixed().hashString(originalUrl, StandardCharsets.UTF_8).toString();
            if(Boolean.TRUE.equals(redisTemplate.hasKey(APP+hash))){
+               //send for analytics
                analyticsService.analyzeURL(originalUrl);
                return new ShortenResponse(APP+hash);
            }
@@ -63,6 +69,12 @@ public class ShortnerService {
        }
     }
 
+    /**
+     * Get original url for a given hash
+     * @param hash
+     * @return
+     * @throws Exception
+     */
     public URI getOriginalUrl(String hash) throws Exception {
         try {
             var value = redisTemplate.opsForValue().get(APP + hash);
