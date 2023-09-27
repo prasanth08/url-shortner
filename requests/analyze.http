@@ -1,0 +1,2 @@
+//@name = Get analaytics
+GET localhost:8080/internal/analysis
