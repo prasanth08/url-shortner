@@ -42,7 +42,7 @@ public class ShortnerService {
            //if present use the same
            var hash = Hashing.murmur3_32_fixed().hashString(originalUrl, StandardCharsets.UTF_8).toString();
            if(Boolean.TRUE.equals(redisTemplate.hasKey(APP+hash))){
-               return new ShortenResponse(redisTemplate.opsForValue().get(APP+hash));
+               return new ShortenResponse(APP+hash);
            }
            // create new if not present
            else{
