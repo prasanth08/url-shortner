@@ -20,13 +20,10 @@ import java.util.logging.Logger;
 public class ShortnerService {
 
     private StringRedisTemplate redisTemplate;
-
-    private static final UrlValidator validator =
-            new UrlValidator(new String[]{"http","https"});
-
+    private AnalyticsService analyticsService;
+    private static final UrlValidator validator = new UrlValidator(new String[]{"http","https"});
     private static final String APP = "app";
     private static final String FORMED_URL = "localhost:8080/%s/%s";
-
     private static final Logger LOGGER = Logger.getLogger(ShortnerService.class.getName());
 
 
@@ -34,14 +31,21 @@ public class ShortnerService {
     public void setRedisTemplate(StringRedisTemplate stringRedisTemplate){
         this.redisTemplate = stringRedisTemplate;
     }
+    @Autowired
+    public void setAnalyticsService(AnalyticsService analyticsService) {
+        this.analyticsService = analyticsService;
+    }
 
     public ShortenResponse createShortUrl(@NonNull ShortenRequest request){
        var originalUrl =  request.originalUrl();
        //validate url
        if(validator.isValid(originalUrl)){
+           //replace www with empty
+           originalUrl = originalUrl.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
            //if present use the same
            var hash = Hashing.murmur3_32_fixed().hashString(originalUrl, StandardCharsets.UTF_8).toString();
            if(Boolean.TRUE.equals(redisTemplate.hasKey(APP+hash))){
+               analyticsService.analyzeURL(originalUrl);
                return new ShortenResponse(APP+hash);
            }
            // create new if not present
@@ -49,6 +53,7 @@ public class ShortnerService {
                LOGGER.log(Level.INFO,"Created a new hash for {0}",originalUrl);
                var newUrl = FORMED_URL.formatted(APP,hash);
                redisTemplate.opsForValue().set(APP+hash,originalUrl);
+               analyticsService.analyzeURL(originalUrl);
                return new ShortenResponse(newUrl);
 
            }
@@ -71,4 +76,5 @@ public class ShortnerService {
         }
         throw new URLNotFoundException("Url is not shortened before or is evicted from cache.");
     }
+
 }
