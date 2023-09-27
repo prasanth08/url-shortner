@@ -31,9 +31,9 @@ public class URLShortnerController {
 
     @GetMapping("/{shortUrl}")
     public ResponseEntity<String> handleRedirectForShortUrl(@PathVariable String shortUrl) throws Exception {
-
         HttpHeaders header = new HttpHeaders();
-        header.setLocation(shortnerService.getOriginalUrl(shortUrl));
+        var uri = shortnerService.getOriginalUrl(shortUrl);
+        header.setLocation(uri);
         return new ResponseEntity<>(header,HttpStatus.MOVED_PERMANENTLY);
     }
     @PostMapping(value = "/shorten",
