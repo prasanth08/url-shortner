@@ -33,6 +33,28 @@ redis-server &
 redis-cli flushall
 ```
 
+Requests
+
+Shorten a url
+```shell script
+curl --location --request POST 'localhost:8080/app/shorten' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "originalUrl": "https://github.com"
+}'
+```
+To test redirection
+copy the response from above on to a browser
+or
+```shell script
+curl --location --request GET 'localhost:8080/app/ee30c62f'
+```
+Get analytics
+```shell script
+curl --location --request GET 'localhost:8080/internal/analysis'
+```
+
+
 **The application will be accessible on http://localhost:8080**
 
 # Future Enhancements / Known Issues
