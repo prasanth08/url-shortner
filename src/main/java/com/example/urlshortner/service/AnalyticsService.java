@@ -31,6 +31,7 @@ public class AnalyticsService {
     @Async
     public void analyzeURL(String url){
         url = StringUtils.substringBeforeLast(url,".");
+        url = StringUtils.substringAfter(url,"//");
         counter.add(url);
     }
 
@@ -44,6 +45,7 @@ public class AnalyticsService {
         keys.parallelStream()
                 .map(s->redisTemplate.opsForValue().get(s))
                 .map(s -> StringUtils.substringBefore(s,"."))
+                .map(s-> StringUtils.substringAfter(s,"//"))
                 .forEach(s -> countMap.put(s, (long) counter.count(s)));
         return countMap;
     }

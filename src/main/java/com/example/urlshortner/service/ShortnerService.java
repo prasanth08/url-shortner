@@ -45,8 +45,6 @@ public class ShortnerService {
        var originalUrl =  request.originalUrl();
        //validate url
        if(validator.isValid(originalUrl)){
-           //replace www with empty
-           originalUrl = originalUrl.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
            //if present use the same
            var hash = Hashing.murmur3_32_fixed().hashString(originalUrl, StandardCharsets.UTF_8).toString();
            if(Boolean.TRUE.equals(redisTemplate.hasKey(APP+hash))){
