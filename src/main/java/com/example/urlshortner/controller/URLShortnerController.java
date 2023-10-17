@@ -41,7 +41,6 @@ public class URLShortnerController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<ShortenResponse> shortenUrl(@RequestBody ShortenRequest request) throws ValidationException {
-
         var response = shortnerService.createShortUrl(request);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }

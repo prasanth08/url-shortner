@@ -5,6 +5,7 @@ import com.example.urlshortner.exception.ValidationException;
 import com.example.urlshortner.model.ShortenRequest;
 import com.example.urlshortner.model.ShortenResponse;
 import com.google.common.hash.Hashing;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -43,6 +44,9 @@ public class ShortnerService {
      */
     public ShortenResponse createShortUrl(@NonNull ShortenRequest request){
        var originalUrl =  request.originalUrl();
+       if(StringUtils.isBlank(originalUrl)){
+           throw new ValidationException("Request is not proper.");
+       }
        //validate url
        if(validator.isValid(originalUrl)){
            //if present use the same
@@ -50,7 +54,7 @@ public class ShortnerService {
            if(Boolean.TRUE.equals(redisTemplate.hasKey(APP+hash))){
                //send for analytics
                analyticsService.analyzeURL(originalUrl);
-               return new ShortenResponse(APP+hash);
+               return new ShortenResponse(FORMED_URL.formatted(APP,hash));
            }
            // create new if not present
            else{

@@ -30,6 +30,7 @@ public class AnalyticsService {
      */
     @Async
     public void analyzeURL(String url){
+        url = url.replace("www.","");
         url = StringUtils.substringBeforeLast(url,".");
         url = StringUtils.substringAfter(url,"//");
         counter.add(url);
@@ -44,6 +45,7 @@ public class AnalyticsService {
         var keys = redisTemplate.keys("*");
         keys.parallelStream()
                 .map(s->redisTemplate.opsForValue().get(s))
+                .map(s -> StringUtils.replace(s,"www.",""))
                 .map(s -> StringUtils.substringBefore(s,"."))
                 .map(s-> StringUtils.substringAfter(s,"//"))
                 .forEach(s -> countMap.put(s, (long) counter.count(s)));

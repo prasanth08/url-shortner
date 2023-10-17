@@ -1,8 +1,9 @@
 
 //@name = shorten url
+// bitly
 POST localhost:8080/app/shorten
 Content-Type: application/json
 
 {
-"originalUrl": "https://google.com"
+"originalUrl": "https://www.youtube.com/home"
 }
